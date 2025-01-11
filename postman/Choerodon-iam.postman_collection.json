@@ -1,0 +1,642 @@
+{
+	"info": {
+		"_postman_id": "ad4c7e00-aec8-4011-95f3-e65c30f1d31f",
+		"name": "Choerodon-iam",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6978248"
+	},
+	"item": [
+		{
+			"name": "api-docs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"OK\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/v2/api-docs",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"v2",
+						"api-docs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list-all-orgs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"not empty\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody.empty).to.be.false;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/organizations/all",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"organizations",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-org-project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();",
+							"",
+							"pm.collectionVariables.set(\"newProject\", BigInt(res.id).toString());",
+							"",
+							"pm.test(\"not failed\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody).not.to.have.property('failed');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"code{{$randomInt}}{{$randomInt}}\",\n    \"name\": \"name{{$randomInt}}\",\n    \"categories\": [\n        {\n            \"code\": \"GENERAL\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/organizations/:org_id/projects",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"organizations",
+						":org_id",
+						"projects"
+					],
+					"variable": [
+						{
+							"key": "org_id",
+							"value": "{{orgOne}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list-all-org-projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"not empty\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody).not.to.be.empty;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/v1/organizations/:org_id/projects/all",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"v1",
+						"organizations",
+						":org_id",
+						"projects",
+						"all"
+					],
+					"variable": [
+						{
+							"key": "org_id",
+							"value": "{{orgOne}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list-enabled-projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"not empty\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(Array.isArray(responseBody)).to.be.true;",
+							"    pm.expect(responseBody).not.to.be.empty;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/inner/projects/all?enabled=true",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"inner",
+						"projects",
+						"all"
+					],
+					"query": [
+						{
+							"key": "enabled",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "disable-org-project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"not failed\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody).not.to.have.property('failed');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/organizations/:org_id/projects/:proj_id/disable",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"organizations",
+						":org_id",
+						"projects",
+						":proj_id",
+						"disable"
+					],
+					"variable": [
+						{
+							"key": "org_id",
+							"value": "{{orgOne}}"
+						},
+						{
+							"key": "proj_id",
+							"value": "{{newProject}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "enable-org-project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"not failed\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody).not.to.have.property('failed');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/organizations/:org_id/projects/:proj_id/enable",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"organizations",
+						":org_id",
+						"projects",
+						":proj_id",
+						"enable"
+					],
+					"variable": [
+						{
+							"key": "org_id",
+							"value": "{{orgOne}}"
+						},
+						{
+							"key": "proj_id",
+							"value": "{{newProject}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-org-user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const randomPhone = Math.floor(Math.random() * 9000000) + 1000000;",
+							"pm.variables.set(\"randomPhone\", randomPhone);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();",
+							"",
+							"pm.collectionVariables.set(\"userId\", BigInt(res.id).toString());",
+							"",
+							"pm.test(\"not failed\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody).not.to.have.property('failed');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"realName\": \"realName\",\n    \"loginName\": \"loginName{{$randomPassword}}\",\n    \"email\": \"email{{$randomPassword}}abc@email.com\",\n    \"internationalTelCode\": \"+86\",\n    \"phone\": \"86{{randomPhone}}86\",\n    \"roles\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/organizations/:org_id/users",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"organizations",
+						":org_id",
+						"users"
+					],
+					"variable": [
+						{
+							"key": "org_id",
+							"value": "{{orgOne}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list-org-users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"not empty\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody.empty).to.be.false;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/all/users?organization_id={{orgOne}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"all",
+						"users"
+					],
+					"query": [
+						{
+							"key": "organization_id",
+							"value": "{{orgOne}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "one-org-user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"not failed\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody).not.to.have.property('failed');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/organizations/:org_id/users/:user_id",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"organizations",
+						":org_id",
+						"users",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "org_id",
+							"value": "{{orgOne}}"
+						},
+						{
+							"key": "user_id",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "disable-org-user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"not failed\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody).not.to.have.property('failed');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/organizations/:org_id/users/:user_id/disable",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"organizations",
+						":org_id",
+						"users",
+						":user_id",
+						"disable"
+					],
+					"variable": [
+						{
+							"key": "org_id",
+							"value": "{{orgOne}}"
+						},
+						{
+							"key": "user_id",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "enable-org-user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"not failed\", function() {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody).not.to.have.property('failed');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}:8030/choerodon/v1/organizations/:org_id/users/:user_id/enable",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8030",
+					"path": [
+						"choerodon",
+						"v1",
+						"organizations",
+						":org_id",
+						"users",
+						":user_id",
+						"enable"
+					],
+					"variable": [
+						{
+							"key": "org_id",
+							"value": "{{orgOne}}"
+						},
+						{
+							"key": "user_id",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "randomPhone",
+			"value": "86111111186",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "newProject",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "orgZero",
+			"value": "0",
+			"type": "string"
+		},
+		{
+			"key": "orgOne",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "roleId",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}
