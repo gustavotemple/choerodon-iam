@@ -2,9 +2,12 @@ spring:
   application:
     name: choerodon-iam
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/hzero_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false}
-    username: ${SPRING_DATASOURCE_USERNAME:root}
-    password: ${SPRING_DATASOURCE_PASSWORD:root}
+#    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://choerodon-mysql1:3306/hzero_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/hzero_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false}
+    username: ${SPRING_DATASOURCE_USERNAME:choerodon}
+    password: ${SPRING_DATASOURCE_PASSWORD:choerodon}
+#    username: ${SPRING_DATASOURCE_USERNAME:root}
+#    password: ${SPRING_DATASOURCE_PASSWORD:root}
     hikari:
       # 连接池最小空闲连接数
       minimum-idle: ${SPRING_DATASOURCE_MINIMUM_IDLE:20}
@@ -13,8 +16,10 @@ spring:
       # 等待连接池分配连接的最大时长（毫秒）
       connection-timeout: ${SPRING_DATASOURCE_CONNECTION_TIMEOUT:30000}
   redis:
-    host: ${SPRING_REDIS_HOST:redis.hzero.org}
-    port: ${SPRING_REDIS_PORT:6379}
+    host: 127.0.0.1
+#    host: choerodon-redis
+    port: ${SPRING_REDIS_PORT:6380}
+#    port: ${SPRING_REDIS_PORT:6379}
     database: ${SPRING_REDIS_DATABASE:1}
     # Redis连接超时时间
     connect-timeout: ${SPRING_REDIS_CONNECT_TIMEOUT:2000}
@@ -199,7 +204,7 @@ hzero:
     user-email-nullable: ${HZERO_IAM_USER_EMAIL_NULLABLE:false}
   resource:
     # 匹配的资源才会解析JwtToken便于得到UserDetails
-    pattern: ${HZERO_RESOURCE_PATTERN:/v1/*,/hzero/*,/iam/v1/*,/iam/hzero/*,/choerodon/v1/*}
+    pattern: ${HZERO_RESOURCE_PATTERN:/v3/*}
   export:
     enable-async: true
   audit:
@@ -220,8 +225,10 @@ hzero:
       sentinel-addresses: ${SPRING_REDIS_SENTINEL_NODES:127.0.0.1:6389,127.0.0.1:6399}
       #单节点模式
     single-server:
+#      address: ${SPRING_REDIS_HOST:choerodon-redis}
       address: ${SPRING_REDIS_HOST:localhost}
-      port: ${SPRING_REDIS_PORT:6379}
+#      port: ${SPRING_REDIS_PORT:6379}
+      port: ${SPRING_REDIS_PORT:6380}
       password: ${SPRING_REDIS_PASSWORD:}
 
 choerodon:
@@ -231,10 +238,10 @@ choerodon:
       core-thread-num: 20
       max-thread-num:  20 # 消费线程数
       poll-interval-ms: 3000 # 拉取消息的间隔(毫秒)，默认1000毫秒
-      enabled: true # 是否启用消费端
+      enabled: false # 是否启用消费端
   schedule:
     consumer:
-      enabled: true # 启用任务调度消费端
+      enabled: false # 启用任务调度消费端
       core-thread-num: 20
       max-thread-num: 20 # 消费线程数
       poll-interval-ms: 3000 # 拉取间隔，默认1000毫秒
