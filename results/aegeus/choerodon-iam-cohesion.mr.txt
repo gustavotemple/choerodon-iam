@@ -1,0 +1,32 @@
+baseline:
+
+MetricResult(metricName=ServiceInterfaceDataCohesion, metricValue=0.6382978723404256)
+MetricResult(metricName=StrictServiceImplementationCohesion, metricValue=0.004199940845903579)
+MetricResult(metricName=LackOfMessageLevelCohesion, metricValue=0.9350550815277403)
+
+split create user:
+
+MetricResult(metricName=ServiceInterfaceDataCohesion, metricValue=0.6382978723404256)
+MetricResult(metricName=StrictServiceImplementationCohesion, metricValue=0.004251242440572421)
+MetricResult(metricName=LackOfMessageLevelCohesion, metricValue=0.9351265307854892)
+
+
+split listProjectsByOrgId:
+
+MetricResult(metricName=ServiceInterfaceDataCohesion, metricValue=0.6382978723404256)
+MetricResult(metricName=StrictServiceImplementationCohesion, metricValue=0.004214275115002226)
+MetricResult(metricName=LackOfMessageLevelCohesion, metricValue=0.9354107226807297)
+
+split list:
+
+MetricResult(metricName=ServiceInterfaceDataCohesion, metricValue=0.6382978723404256)
+MetricResult(metricName=StrictServiceImplementationCohesion, metricValue=0.004214275115002226)
+MetricResult(metricName=LackOfMessageLevelCohesion, metricValue=0.9348002063717241)
+
+all 3:
+
+MetricResult(metricName=ServiceInterfaceDataCohesion, metricValue=0.6382978723404256)
+MetricResult(metricName=StrictServiceImplementationCohesion, metricValue=0.004214275115002226)
+MetricResult(metricName=LackOfMessageLevelCohesion, metricValue=0.9350408169450416)
+
+
